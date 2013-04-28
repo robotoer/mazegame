@@ -22,6 +22,7 @@ Library/AssetImportState
 Library/AssetServerCacheV3
 Library/AssetVersioning.db
 Library/FailedAssetImports.txt
+Library/InspectorExpandedItems.asset
 Library/ScriptAssemblies
 Library/ScriptMapper
 Library/assetDatabase3
