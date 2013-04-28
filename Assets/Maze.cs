@@ -1,56 +1,9 @@
 using System;
 using System.Collections;
 
-public class Edge {
-  public static Edge randomEdge(Random rand) {
-    return new Edge(rand.Next(100) % 2 == 0);
-  }
+using UnityEngine;
 
-  public bool mIsWall;
-
-  public Edge(bool isWall) {
-    mIsWall = isWall;
-  }
-}
-
-public class Tile {
-  private Edge mUp;
-  private Edge mDown;
-  private Edge mLeft;
-  private Edge mRight;
-  private int mUnionGroup;
-
-  public Edge Up {
-    get { return mUp; }
-  }
-
-  public Edge Down {
-    get { return mDown; }
-  }
-
-  public Edge Left {
-    get { return mLeft; }
-  }
-
-  public Edge Right {
-    get { return mRight; }
-  }
-
-  public int UnionGroup {
-    get { return mUnionGroup; }
-    set { mUnionGroup = value; }
-  }
-
-
-  public Tile(Edge up, Edge down, Edge left, Edge right) {
-    mUp = up;
-    mDown = down;
-    mLeft = left;
-    mRight = right;
-  }
-}
-
-public class Maze {
+public class Maze : MonoBehaviour {
   public int mWidth;
   public int mHeight;
   public Tile[,] mTiles;
@@ -67,7 +20,7 @@ public class Maze {
   }
 
   public static Maze generateMaze(int xDim, int yDim) {
-    Random rand = new Random();
+    System.Random rand = new System.Random();
 
     // Accumulator holding the previous row's bottom edges.
     Edge[] ups = new Edge[xDim];
