@@ -1,41 +1,28 @@
-using System.Collections;
+/*using System.Collections;
 using System.Collections.Generic;
 
 using UnityEngine;
 
-namespace GoldBlastGames
-{
-  public class Game : MonoBehaviour
-  {
-    // Maze and Chunk sizes.
-    public static float wallWidth = 0.05f;
-    public static float tileWidth = 1.0f;
-    public static float tileHeight = 1.0f;
-    public static int mazeWidth = 9;
-    public static int mazeHeight = 9;
-    public static int chunkWidth = 3;
-    public static int chunkHeight = 3;
-    public static int numChunks = 5;
-    
-    // Maze and MazeObject.
-    private Maze mMaze;
-    public Maze maze {
-      get { return mMaze; }
-    }
+namespace GoldBlastGames {
+  /// <summary>
+  /// Maze object that provides rendering support for Maze.
+  ///  - x axis is horizontal
+  ///  - y axis is vertical
+  /// This also makes the assumption that creating a Prefab instance will also cause
+  /// Unity to know about it and render it properly.
+  /// </summary>
+  public class MazeObject : MonoBehaviour {
+    static float wallWidth = 0.05f;
+    static float tileWidth = 1.0f;
+    static float tileHeight = 1.0f;
+    static int mazeWidth = 10;
+    static int mazeHeight = 10;
 
-    // Keep track of the wall GameObjects so that they can be updated.
+    Maze mMaze = Maze.generateMaze(mazeHeight, mazeWidth);
     Dictionary<Edge, GameObject> mWalls = new Dictionary<Edge, GameObject>();
-    
-    // Chunks deck for wizard.
-    Maze[] chunksDeck;
-    
-    // MazeRunners.
-    public Transform MazeRunner;
-    public Transform[] mazeRunners = new Transform[4];
-    public MazeRunnerMove[] mazeRunnerMovers = new MazeRunnerMove[4];
 
-    // ------------- Maze Rendering --------------
-    private void initializeMazeRender() {
+    // Use this for initialization
+    void Start () {
       // TODO: Validate that the object this is attached to is a 2D rectangle.
 
       Tile[,] tiles = mMaze.Tiles;
@@ -75,8 +62,11 @@ namespace GoldBlastGames
         }
       }
 
-      // For debugging purposes, print a string version of the maze.
       printThings();
+    }
+
+    // Update is called once per frame
+    void Update () {
     }
 
     private GameObject Tile(Vector3 center, int x, int y) {
@@ -87,6 +77,8 @@ namespace GoldBlastGames
           center.y + ((mazeHeight / 2.0f) - y - 0.5f) * tileHeight,
           center.z);
       cube.renderer.material.color = new Color(0.0f, 0.0f, 1.0f);
+
+      print ("center: " + center + ", x: " + x + ", y: " + y + " ===> " + cube.transform.position);
 
       return cube;
     }
@@ -204,78 +196,6 @@ namespace GoldBlastGames
 
       print (mazestr);
     }
-
-    // ------ Initialization ------
-    void Start ()
-    {
-      // Create maze.
-      mMaze = Maze.generateMaze(mazeWidth, mazeHeight, this);
-      initializeMazeRender();
-
-      // Create chunks for wizard.
-      chunksDeck = new Maze[numChunks];
-      for (int i = 0; i < numChunks; i ++) {
-        chunksDeck[i] = Maze.generateMaze(chunkWidth, chunkHeight, this);
-      }
-      
-      // TODO: Render chunks.
-      
-      // Create maze runners.
-      for (int i = 0; i < 4; i ++) {
-        Transform runner = (Transform)Instantiate (MazeRunner);
-        mazeRunners [i] = runner;
-        mazeRunnerMovers [i] = (MazeRunnerMove)runner.GetComponent ("MazeRunnerMove");
-      }
-    }
-
-    // ------ Update ------
-    void Update ()
-    {
-      MazeRunnerMove move1 = mazeRunnerMovers [0];
-      MazeRunnerMove move2 = mazeRunnerMovers [1];
-      MazeRunnerMove move3 = mazeRunnerMovers [2];
-      MazeRunnerMove move4 = mazeRunnerMovers [3];
-
-      if (Input.GetButtonDown ("1Up")) {
-        move1.moveUp ();
-      } else if (Input.GetButtonDown ("1Down")) {
-        move1.moveDown ();
-      } else if (Input.GetButtonDown ("1Left")) {
-        move1.moveLeft();
-      } else if (Input.GetButtonDown ("1Right")) {
-        move1.moveRight ();
-      }
-      
-      if (Input.GetButtonDown ("2Up")) {
-        move2.moveUp ();
-      } else if (Input.GetButtonDown ("2Down")) {
-        move2.moveDown ();
-      } else if (Input.GetButtonDown ("2Left")) {
-        move2.moveLeft();
-      } else if (Input.GetButtonDown ("2Right")) {
-        move2.moveRight ();
-      }
-      
-      /*
-      if (Input.GetButtonDown ("3Up")) {
-        move3.moveUp ();
-      } else if (Input.GetButtonDown ("3Down")) {
-        move3.moveDown ();
-      } else if (Input.GetButtonDown ("3Left")) {
-        move3.moveLeft ();
-      } else if (Input.GetButtonDown ("3Right")) {
-        move3.moveRight ();
-      }
-
-      if (Input.GetButtonDown ("4Up")) {
-        move4.moveUp ();
-      } else if (Input.GetButtonDown ("4Down")) {
-        move4.moveDown ();
-      } else if (Input.GetButtonDown ("4Left")) {
-        move4.moveLeft ();
-      } else if (Input.GetButtonDown ("4Right")) {
-        move4.moveRight ();
-      }*/
-    }
   }
 }
+*/

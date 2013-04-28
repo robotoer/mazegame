@@ -1,11 +1,10 @@
 using System;
 using System.Collections;
-using UnityEngine;
 
 namespace GoldBlastGames {
   public class Maze {
     public static Maze generateMaze(int xDim, int yDim, Game game) {
-      System.Random rand = new System.Random();
+      Random rand = new Random();
 
       // Accumulator holding the previous row's bottom edges.
       Edge[] ups = new Edge[xDim];

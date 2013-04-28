@@ -32,7 +32,7 @@ namespace GoldBlastGames {
         
     bool inBounds(int x, int y) {
       Debug.Log ("Checking bounds: " + x + "," + y);
-      bool result = (x >= 0 && y >= 0 && x < game.mazeWidth && y < game.mazeHeight);
+      bool result = (x >= 0 && y >= 0 && x < Game.mazeWidth && y < Game.mazeHeight);
       Debug.Log (result);
       return result;
     }
