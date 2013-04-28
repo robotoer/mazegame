@@ -145,47 +145,47 @@ namespace GoldBlastGames
     }
 
     private void printThings() {
-      int xDim = mMaze.Tiles.GetLength(0);
-      int yDim = mMaze.Tiles.GetLength(1);
+      int xDim = mMaze.Tiles.GetLength(1);
+      int yDim = mMaze.Tiles.GetLength(0);
 
       bool[,] dispMatrix = new bool[3 * xDim, 3 * yDim];
 
       for (int y = 0; y < yDim; y++) {
         for (int x = 0; x < xDim; x++) {
-          Tile tile = mMaze.Tiles[x, y];
+          Tile tile = mMaze.Tiles[y, x];
 
           // Always draw corners.
-          dispMatrix[3 * x, 3 * y] = true;
-          dispMatrix[3 * x + 2, 3 * y] = true;
-          dispMatrix[3 * x, 3 * y + 2] = true;
-          dispMatrix[3 * x + 2, 3 * y + 2] = true;
+          dispMatrix[3 * y, 3 * x] = true;
+          dispMatrix[3 * y + 2, 3 * x] = true;
+          dispMatrix[3 * y, 3 * x + 2] = true;
+          dispMatrix[3 * y + 2, 3 * x + 2] = true;
 
           // up
           if (tile.Up.IsWall) {
-            dispMatrix[3 * x + 1, 3 * y] = true;
+            dispMatrix[3 * y, 3 * x + 1] = true;
           } else {
-            dispMatrix[3 * x + 1, 3 * y] = false;
+            dispMatrix[3 * y, 3 * x + 1] = false;
           }
 
           // down
           if (tile.Down.IsWall) {
-            dispMatrix[3 * x + 1, 3 * y + 2] = true;
+            dispMatrix[3 * y + 2, 3 * x + 1] = true;
           } else {
-            dispMatrix[3 * x + 1, 3 * y + 2] = false;
+            dispMatrix[3 * y + 2, 3 * x + 1] = false;
           }
 
           // left
           if (tile.Left.IsWall) {
-            dispMatrix[3 * x, 3 * y + 1] = true;
+            dispMatrix[3 * y + 1, 3 * x] = true;
           } else {
-            dispMatrix[3 * x, 3 * y + 1] = false;
+            dispMatrix[3 * y + 1, 3 * x] = false;
           }
 
           // right
           if (tile.Right.IsWall) {
-            dispMatrix[3 * x + 2, 3 * y + 1] = true;
+            dispMatrix[3 * y + 1, 3 * x + 2] = true;
           } else {
-            dispMatrix[3 * x + 2, 3 * y + 1] = false;
+            dispMatrix[3 * y + 1, 3 * x + 2] = false;
           }
         }
       }
