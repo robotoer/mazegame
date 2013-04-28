@@ -24,11 +24,11 @@ public class MazeRunnerMove : MonoBehaviour {
 	}
     
     public void moveUp () {
-        gameObject.transform.Translate(Vector3.forward);
+        gameObject.transform.Translate(Vector3.up);
     }
     
     public void moveDown () {
-        gameObject.transform.Translate (-Vector3.forward);
+        gameObject.transform.Translate (-Vector3.up);
     }
     
     public void moveLeft() {

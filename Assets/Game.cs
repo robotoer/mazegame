@@ -73,7 +73,7 @@ namespace GoldBlastGames
       } else if (Input.GetButtonDown ("2Right")) {
         move2.moveRight ();
       }
-
+      /*
       if (Input.GetButtonDown ("3Up")) {
         move3.moveUp ();
       } else if (Input.GetButtonDown ("3Down")) {
@@ -92,7 +92,7 @@ namespace GoldBlastGames
         move4.moveLeft ();
       } else if (Input.GetButtonDown ("4Right")) {
         move4.moveRight ();
-      }
+      }*/
     }
   }
 }
