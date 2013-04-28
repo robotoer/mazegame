@@ -2,6 +2,18 @@ using UnityEngine;
 using System.Collections;
 
 public class MazeRunnerMove : MonoBehaviour {
+  private int mXCoord = 0;
+  private int mYCoord = 0;
+
+  public int XCoord {
+    get { return mXCoord; }
+    set { mXCoord = value; }
+  }
+
+  public int YCoord {
+    get { return mYCoord; }
+    set { mYCoord = value; }
+  }
 
 	// Use this for initialization
 	void Start () {

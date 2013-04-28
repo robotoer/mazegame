@@ -17,6 +17,7 @@ namespace GoldBlastGames {
     /// </value>
     public Edge Up {
       get { return mUp; }
+      set { mUp = value; }
     }
   
     /// <summary>
@@ -27,6 +28,7 @@ namespace GoldBlastGames {
     /// </value>
     public Edge Down {
       get { return mDown; }
+      set { mDown = value; }
     }
   
     /// <summary>
@@ -37,6 +39,7 @@ namespace GoldBlastGames {
     /// </value>
     public Edge Left {
       get { return mLeft; }
+      set { mLeft = value; }
     }
   
     /// <summary>
@@ -47,6 +50,7 @@ namespace GoldBlastGames {
     /// </value>
     public Edge Right {
       get { return mRight; }
+      set { mRight = value; }
     }
   
     /// <summary>

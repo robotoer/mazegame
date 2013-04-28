@@ -1,9 +1,10 @@
 using System;
 using System.Collections;
+using UnityEngine;
 
 namespace GoldBlastGames {
   public class Maze {
-    public static Maze generateMaze(int xDim, int yDim) {
+    public static Maze generateMaze(int xDim, int yDim, Game game) {
       System.Random rand = new System.Random();
 
       // Accumulator holding the previous row's bottom edges.
@@ -13,7 +14,7 @@ namespace GoldBlastGames {
       }
 
       // Populate a maze instance.
-      Maze maze = new Maze(yDim, xDim);
+      Maze maze = new Maze(yDim, xDim, game);
       for (int y = 0; y < yDim; y++) {
         Edge last = Edge.randomEdge(rand);
 
@@ -39,6 +40,9 @@ namespace GoldBlastGames {
     private int mWidth;
     private int mHeight;
     private Tile[,] mTiles;
+    private Game mGame;
+    private int mXExit;
+    private int mYExit;
   
     public int Width {
       get { return mWidth; }
@@ -52,19 +56,40 @@ namespace GoldBlastGames {
       get { return mTiles; }
       set { mTiles = value; }
     }
+
+    public Game Game {
+      get { return mGame; }
+    }
+
+    public int XExit {
+      get { return mXExit; }
+      set { mXExit = value; }
+    }
+
+    public int YExit {
+      get { return mYExit; }
+      set { mYExit = value; }
+    }
   
-    public Maze(int height, int width) {
+    public Maze(int height, int width, Game game) {
       mHeight = height;
       mWidth = width;
       mTiles = new Tile[height, width];
+      mGame = game;
     }
   
-    public Maze(Maze old) : this(old.Height, old.Width) {}
+    public Maze(Maze old) : this(old.Height, old.Width, old.Game) {}
 
     public void deepCopyTiles(Maze old) {
       for (int i=0; i < mHeight; i++) {
         for (int j=0; j < mWidth; j++) {
           mTiles[i,j] = new Tile(old.Tiles[i,j]);
+          if (i > 0) {
+            mTiles[i,j].Up = mTiles[i-1, j].Down;
+          }
+          if (j > 0) {
+            mTiles[i,j].Left = mTiles[i, j-1].Right;
+          }
         }
       }
     }
@@ -104,6 +129,39 @@ namespace GoldBlastGames {
 
     public bool find(Tile start, Tile end) {
       return start.UnionGroup == end.UnionGroup;
+    }
+
+    public bool validateChunk(Maze chunk, int xCoord, int yCoord) {
+      if (mHeight - chunk.Height - yCoord < 0) {
+        return false;
+      }
+      if (mWidth - chunk.Width - xCoord < 0) {
+        return false;
+      }
+      Maze copy = new Maze(this);
+      copy.deepCopyTiles(this);
+      copy.initialGroups();
+
+      for (int x=0; x < chunk.Width; x++) {
+        for (int y=0; y < chunk.Height; y++) {
+          copy.Tiles[y + yCoord, x + xCoord] = new Tile(chunk.Tiles[y, x]);
+        }
+      }
+      for (int x=copy.Width; x > 0; x--) {
+        for (int y=copy.Height; y > 0; y--) {
+          if (y < copy.Height) {
+            copy.Tiles[y, x].Down = copy.Tiles[y+1, x].Up;
+          }
+          if (x < mWidth) {
+            copy.Tiles[y,x].Right = copy.Tiles[y, x+1].Left;
+          }
+        }
+      }
+      bool retVal = false;
+      foreach (MazeRunnerMove runner in mGame.mazeRunnerMovers) {
+        retVal = retVal || find(mTiles[runner.YCoord, runner.XCoord], mTiles[mYExit, mXExit]);
+      }
+      return retVal;
     }
   }
 }

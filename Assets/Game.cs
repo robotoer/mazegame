@@ -10,7 +10,7 @@ namespace GoldBlastGames
     int mazeHeight = 9;
     int chunkWidth = 3;
     int chunkHeight = 3;
-    int numChunks = 3;
+    int numChunks = 5;
     
     // Maze and MazeObject.
     Maze maze;
@@ -21,18 +21,18 @@ namespace GoldBlastGames
     // MazeRunners.
     public Transform MazeRunner;
     public Transform[] mazeRunners = new Transform[4];
-    MazeRunnerMove[] mazeRunnerMovers = new MazeRunnerMove[4];
+    public MazeRunnerMove[] mazeRunnerMovers = new MazeRunnerMove[4];
 
     // ------ Initialization ------
     void Start ()
     {
       // Create maze.
-      maze = Maze.generateMaze(mazeWidth, mazeHeight);
+      maze = Maze.generateMaze(mazeWidth, mazeHeight, this);
       
       // Create chunks for wizard.
       chunksDeck = new Maze[numChunks];
       for (int i = 0; i < numChunks; i ++) {
-        chunksDeck[i] = Maze.generateMaze(chunkWidth, chunkHeight);
+        chunksDeck[i] = Maze.generateMaze(chunkWidth, chunkHeight, this);
       }
       
       // TODO: render maze object; render chunks.
