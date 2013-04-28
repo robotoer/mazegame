@@ -5,11 +5,20 @@ namespace GoldBlastGames {
     public static Edge randomEdge(Random rand) {
       return new Edge(rand.Next(100) % 2 == 0);
     }
-  
-    public bool mIsWall;
-  
+
+    private bool mIsWall;
+
+    public bool IsWall {
+      get { return mIsWall; }
+      set { mIsWall = value; }
+    }
+
     public Edge(bool isWall) {
       mIsWall = isWall;
     }
-}
+
+    public Edge(Edge old) {
+      this(old.IsWall);
+    }
+  }
 }
