@@ -92,7 +92,7 @@ public class Maze {
         last = current.Right;
 
         // Store the tile in the maze.
-        maze.mTiles[x, y] = current;
+        maze.mTiles[y, x] = current;
       }
     }
 
