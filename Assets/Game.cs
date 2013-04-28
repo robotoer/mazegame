@@ -6,14 +6,14 @@ namespace GoldBlastGames
   public class Game : MonoBehaviour
   {
     // Maze and Chunk sizes.
-    int mazeWidth = 9;
-    int mazeHeight = 9;
+    public int mazeWidth = 9;
+    public int mazeHeight = 9;
     int chunkWidth = 3;
     int chunkHeight = 3;
     int numChunks = 5;
     
     // Maze and MazeObject.
-    Maze maze;
+    public Maze maze;
     
     // Chunks deck for wizard.
     Maze[] chunksDeck;
@@ -58,21 +58,21 @@ namespace GoldBlastGames
       } else if (Input.GetButtonDown ("1Down")) {
         move1.moveDown ();
       } else if (Input.GetButtonDown ("1Left")) {
-        move1.moveLeft ();
+        move1.moveLeft();
       } else if (Input.GetButtonDown ("1Right")) {
         move1.moveRight ();
       }
-
-
+      
       if (Input.GetButtonDown ("2Up")) {
         move2.moveUp ();
       } else if (Input.GetButtonDown ("2Down")) {
         move2.moveDown ();
       } else if (Input.GetButtonDown ("2Left")) {
-        move2.moveLeft ();
+        move2.moveLeft();
       } else if (Input.GetButtonDown ("2Right")) {
         move2.moveRight ();
       }
+      
       /*
       if (Input.GetButtonDown ("3Up")) {
         move3.moveUp ();
