@@ -17,8 +17,6 @@ namespace GoldBlastGames {
       mIsWall = isWall;
     }
 
-    public Edge(Edge old) {
-      this(old.IsWall);
-    }
+    public Edge(Edge old) : this(old.IsWall) {}
   }
 }

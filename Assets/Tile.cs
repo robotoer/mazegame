@@ -81,5 +81,13 @@ namespace GoldBlastGames {
       mLeft = left;
       mRight = right;
     }
-}
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="Tile"/> class.
+    /// </summary>
+    /// <param name='old'>
+    /// Tile object of which to make a deep copy.
+    /// </param>
+    public Tile(Tile old) : this(new Edge(old.Up), new Edge(old.Down), new Edge(old.Left), new Edge(old.Right)) {}
+  }
 }
