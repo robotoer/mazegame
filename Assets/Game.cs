@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -79,9 +80,20 @@ namespace GoldBlastGames
       printThings();
     }
 
+    private static Vector3 mazeRenderOffset = new Vector3(0.5f, -0.5f, 0.0f);
+    private Vector3 projectGameCoords(Vector3 center, Vector2 coord) {
+      return new Vector3(
+          center.x + (coord.x - (mazeWidth / 2.0f)) * tileWidth,
+          center.y + ((mazeHeight / 2.0f) - coord.y) * tileHeight,
+          center.z);
+    }
+
     private GameObject Tile(Vector3 center, int x, int y) {
+      Vector3 physicalCoord = projectGameCoords(transform.position, new Vector2(x, y));
+
       GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
       cube.transform.localScale = new Vector3(tileWidth, tileHeight, 0.5f);
+      cube.transform.position = physicalCoord + mazeRenderOffset;
       cube.transform.position = new Vector3(
           center.x + (x - (mazeWidth / 2.0f) + 0.5f) * tileWidth,
           center.y + ((mazeHeight / 2.0f) - y - 0.5f) * tileHeight,
@@ -92,56 +104,61 @@ namespace GoldBlastGames
     }
 
     private GameObject TopWall(Vector3 center, int x, int y) {
+      Vector3 physicalCoord = projectGameCoords(transform.position, new Vector2(x, y));
+      Vector3 offset = new Vector3(0.0f, 0.5f, 0.0f);
+
       GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
       //cube.AddComponent<Rigidbody>();
       cube.transform.localScale = new Vector3(tileWidth, wallWidth, 1.0f);
-      cube.transform.position = new Vector3(
-          center.x + (x - (mazeWidth / 2.0f) + 0.5f) * tileWidth,
-          center.y + ((mazeHeight / 2.0f) - y) * tileHeight,
-          center.z);
+      cube.transform.position = physicalCoord + mazeRenderOffset + offset;
       cube.renderer.material.color = new Color(1.0f, 0.0f, 0.0f);
 
       return cube;
     }
 
     private GameObject BottomWall(Vector3 center, int x, int y) {
+      Vector3 physicalCoord = projectGameCoords(transform.position, new Vector2(x, y));
+      Vector3 offset = new Vector3(0.0f, -0.5f, 0.0f);
+
       GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
       //cube.AddComponent<Rigidbody>();
       cube.transform.localScale = new Vector3(tileWidth, wallWidth, 1.0f);
-      cube.transform.position = new Vector3(
-          center.x + (x - (mazeWidth / 2.0f) + 0.5f) * tileWidth,
-          center.y + ((mazeHeight / 2.0f) - y - 1.0f) * tileHeight,
-          center.z);
+      cube.transform.position = physicalCoord + mazeRenderOffset + offset;
       cube.renderer.material.color = new Color(1.0f, 0.0f, 0.0f);
 
       return cube;
     }
 
-    //0.0f + (0 - 2 - 0.5) * 1.0f / 2.0f =
     private GameObject LeftWall(Vector3 center, int x, int y) {
+      Vector3 physicalCoord = projectGameCoords(transform.position, new Vector2(x, y));
+      Vector3 offset = new Vector3(-0.5f, 0.0f, 0.0f);
+
       GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
       //cube.AddComponent<Rigidbody>();
       cube.transform.localScale = new Vector3(wallWidth, tileHeight, 1.0f);
-      cube.transform.position = new Vector3(
-          center.x + (x - (mazeWidth / 2.0f)) * tileWidth,
-          center.y + ((mazeHeight / 2.0f) - y - 0.5f) * tileHeight,
-          center.z);
+      cube.transform.position = physicalCoord + mazeRenderOffset + offset;
       cube.renderer.material.color = new Color(1.0f, 0.0f, 0.0f);
 
       return cube;
     }
 
     private GameObject RightWall(Vector3 center, int x, int y) {
+      Vector3 physicalCoord = projectGameCoords(transform.position, new Vector2(x, y));
+      Vector3 offset = new Vector3(0.5f, 0.0f, 0.0f);
+
       GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
       //cube.AddComponent<Rigidbody>();
       cube.transform.localScale = new Vector3(wallWidth, tileHeight, 1.0f);
-      cube.transform.position = new Vector3(
-          center.x + (x - (mazeWidth / 2.0f) + 1.0f) * tileWidth,
-          center.y + ((mazeHeight / 2.0f) - y - 0.5f) * tileHeight,
-          center.z);
+      cube.transform.position = physicalCoord + mazeRenderOffset + offset;
       cube.renderer.material.color = new Color(1.0f, 0.0f, 0.0f);
 
       return cube;
+    }
+
+    private void updateMaze() {
+      foreach (KeyValuePair<Edge, GameObject> entry in mWalls) {
+        entry.Value.renderer.enabled = entry.Key.IsWall;
+      }
     }
 
     private void printThings() {
@@ -231,6 +248,8 @@ namespace GoldBlastGames
     // ------ Update ------
     void Update ()
     {
+      updateMaze();
+
       MazeRunnerMove move1 = mazeRunnerMovers [0];
       MazeRunnerMove move2 = mazeRunnerMovers [1];
       MazeRunnerMove move3 = mazeRunnerMovers [2];
