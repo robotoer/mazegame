@@ -31,7 +31,9 @@ namespace GoldBlastGames {
       maze = game.maze;
       mXCoord = maze.Width / 2;
       mYCoord = maze.Height / 2;
-      gameObject.transform.position = new Vector3(0, 0, 0);
+      gameObject.transform.position = new Vector3(0, 0, -0.5f);
+
+      updateCamera();
   	}
 
     // Moving in the 4 cardinal directions.

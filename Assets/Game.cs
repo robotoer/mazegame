@@ -12,8 +12,8 @@ namespace GoldBlastGames
     public static float wallWidth = 0.05f;
     public static float tileWidth = 1.0f;
     public static float tileHeight = 1.0f;
-    public static int mazeWidth = 9;
-    public static int mazeHeight = 9;
+    public static int mazeWidth = 31;
+    public static int mazeHeight = 31;
     public static int chunkWidth = 3;
     public static int chunkHeight = 3;
     public static int numChunks = 5;
@@ -97,7 +97,7 @@ namespace GoldBlastGames
       cube.transform.position = new Vector3(
           center.x + (x - (mazeWidth / 2.0f) + 0.5f) * tileWidth,
           center.y + ((mazeHeight / 2.0f) - y - 0.5f) * tileHeight,
-          center.z);
+          center.z + 0.5f);
       cube.renderer.material.color = new Color(0.0f, 0.0f, 1.0f);
 
       return cube;
@@ -274,7 +274,7 @@ namespace GoldBlastGames
       } else if (Input.GetButtonDown ("2Right")) {
         move2.moveRight ();
       }
-      
+
       /*
       if (Input.GetButtonDown ("3Up")) {
         move3.moveUp ();
