@@ -48,13 +48,18 @@ namespace GoldBlastGames
 
       // Add the left most wall in the top row.
       GameObject upperLeftWall = LeftWall(transform.position, 0, 0);
+      // TODO: Keep track of these so they can be turned on/off with relevant edges.
+      GameObject upperLeftPost = UpperLeftPost(transform.position, 0, 0);
       upperLeftWall.renderer.enabled = tiles[0, 0].Left.IsWall;
+      //upperLeftPost.renderer.enabled = tiles[0, 0].Left.IsWall;
       mWalls[tiles[0, 0].Left] = upperLeftWall;
 
       // Add the top most row of walls.
       for (int x = 0; x < xDim; x++) {
         GameObject topWall = TopWall(transform.position, x, 0);
+        GameObject topPost = UpperLeftPost(transform.position, x + 1, 0);
         topWall.renderer.enabled = tiles[0, x].Up.IsWall;
+        //topPost.renderer.enabled = tiles[0, x].Up.IsWall;
         mWalls[tiles[0, x].Up] = topWall;
       }
 
@@ -62,12 +67,14 @@ namespace GoldBlastGames
       for (int y = 0; y < yDim; y++) {
         // Add left most wall in the row.
         GameObject leftWall = LeftWall(transform.position, 0, y);
+        GameObject leftPost = UpperLeftPost(transform.position, 0, y + 1);
         leftWall.renderer.enabled = tiles[y, 0].Left.IsWall;
         mWalls[tiles[y, 0].Left] = leftWall;
 
         // Add cells (within row).
         for (int x = 0; x < xDim; x++) {
           GameObject rightWall = RightWall(transform.position, x, y);
+          GameObject rightPost = UpperLeftPost(transform.position, x + 1, y + 1);
           rightWall.renderer.enabled = tiles[y, x].Right.IsWall;
           mWalls[tiles[y, x].Right] = rightWall;
 
@@ -78,9 +85,6 @@ namespace GoldBlastGames
           Tile(transform.position, x, y);
         }
       }
-
-      // For debugging purposes, print a string version of the maze.
-      printThings();
     }
 
     private static Vector3 mazeRenderOffset = new Vector3(0.5f, -0.5f, 0.0f);
@@ -89,6 +93,18 @@ namespace GoldBlastGames
           center.x + (coord.x - (mazeWidth / 2.0f)) * tileWidth,
           center.y + ((mazeHeight / 2.0f) - coord.y) * tileHeight,
           center.z);
+    }
+
+    private GameObject UpperLeftPost(Vector3 center, int x, int y) {
+      Vector3 physicalCoord = projectGameCoords(transform.position, new Vector2(x, y));
+      Vector3 offset = new Vector3(-0.5f, 0.5f, 0.0f);
+
+      GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
+      cube.transform.localScale = new Vector3(wallWidth, wallWidth, 1.0f);
+      cube.transform.position = physicalCoord + mazeRenderOffset + offset;
+      cube.renderer.material.color = new Color(1.0f, 0.0f, 0.0f);
+
+      return cube;
     }
 
     private GameObject Tile(Vector3 center, int x, int y) {
@@ -100,7 +116,7 @@ namespace GoldBlastGames
       cube.transform.position = new Vector3(
           center.x + (x - (mazeWidth / 2.0f) + 0.5f) * tileWidth,
           center.y + ((mazeHeight / 2.0f) - y - 0.5f) * tileHeight,
-          center.z + 0.5f);
+          center.z + 0.75f);
       cube.renderer.material.color = new Color(0.0f, 0.0f, 1.0f);
 
       return cube;
@@ -111,14 +127,16 @@ namespace GoldBlastGames
       Vector3 offset = new Vector3(0.0f, 0.5f, 0.0f);
 
       GameObject wall = (GameObject) Instantiate(Wall);
+      wall.AddComponent<Rigidbody>();
+      wall.GetComponent<Rigidbody>().useGravity = false;
+      wall.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
       WallBehaviour wallBehaviour = (WallBehaviour) wall.GetComponent("WallBehaviour");
       wallBehaviour.setPosition(
-          tileWidth,
+          tileWidth - wallWidth,
           wallWidth,
           physicalCoord,
           mazeRenderOffset,
           offset);
-
       wallBehaviour.initializePosition(x, y, Maze.Direction.Up);
 
       return wall;
@@ -129,14 +147,16 @@ namespace GoldBlastGames
       Vector3 offset = new Vector3(0.0f, -0.5f, 0.0f);
 
       GameObject wall = (GameObject) Instantiate(Wall);
+      wall.AddComponent<Rigidbody>();
+      wall.GetComponent<Rigidbody>().useGravity = false;
+      wall.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
       WallBehaviour wallBehaviour = (WallBehaviour) wall.GetComponent("WallBehaviour");
       wallBehaviour.setPosition(
-          tileWidth,
+          tileWidth - wallWidth,
           wallWidth,
           physicalCoord,
           mazeRenderOffset,
           offset);
-
       wallBehaviour.initializePosition(x, y, Maze.Direction.Down);
 
       return wall;
@@ -147,14 +167,16 @@ namespace GoldBlastGames
       Vector3 offset = new Vector3(-0.5f, 0.0f, 0.0f);
 
       GameObject wall = (GameObject) Instantiate(Wall);
+      wall.AddComponent<Rigidbody>();
+      wall.GetComponent<Rigidbody>().useGravity = false;
+      wall.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
       WallBehaviour wallBehaviour = (WallBehaviour) wall.GetComponent("WallBehaviour");
       wallBehaviour.setPosition(
           wallWidth,
-          tileHeight,
+          tileHeight - wallWidth,
           physicalCoord,
           mazeRenderOffset,
           offset);
-
       wallBehaviour.initializePosition(x, y, Maze.Direction.Left);
 
       return wall;
@@ -165,14 +187,16 @@ namespace GoldBlastGames
       Vector3 offset = new Vector3(0.5f, 0.0f, 0.0f);
 
       GameObject wall = (GameObject) Instantiate(Wall);
+      wall.AddComponent<Rigidbody>();
+      wall.GetComponent<Rigidbody>().useGravity = false;
+      wall.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
       WallBehaviour wallBehaviour = (WallBehaviour) wall.GetComponent("WallBehaviour");
       wallBehaviour.setPosition(
           wallWidth,
-          tileHeight,
+          tileHeight - wallWidth,
           physicalCoord,
           mazeRenderOffset,
           offset);
-
       wallBehaviour.initializePosition(x, y, Maze.Direction.Right);
 
       return wall;
@@ -248,6 +272,8 @@ namespace GoldBlastGames
     // ------ Initialization ------
     void Start ()
     {
+      Physics.gravity = new Vector3(0, 0, 9.8f);
+
       // Create maze.
       mMaze = Maze.generateMaze(mazeWidth, mazeHeight, this);
       initializeMazeRender();
