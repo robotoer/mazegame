@@ -1,5 +1,7 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace GoldBlastGames {
   public class Maze {
@@ -24,6 +26,25 @@ namespace GoldBlastGames {
               Edge.randomEdge(rand),
               last,
               Edge.randomEdge(rand));
+
+          if (current.isClosed()) {
+            switch (rand.Next(4)) {
+            case 0:
+              current.Up.IsWall = false;
+              break;
+            case 1:
+              current.Down.IsWall = false;
+              break;
+            case 2:
+              current.Left.IsWall = false;
+              break;
+            case 3:
+              current.Right.IsWall = false;
+              break;
+            default:
+              break;
+            }
+          }
   
           ups[x] = current.Down;
           last = current.Right;
@@ -33,8 +54,53 @@ namespace GoldBlastGames {
         }
       }
 
+      // Ensure no part of the maze is inaccessible.
+      maze.initialGroups();
+      while (maze.unionGroups().Count > 1) {
+        HashSet<int>.Enumerator groupIterator = maze.unionGroups().GetEnumerator();
+        groupIterator.MoveNext();
+        int first = groupIterator.Current;
+        HashSet<Edge> sharedEdges = new HashSet<Edge>();
+
+        while (sharedEdges.Count == 0) {
+          groupIterator.MoveNext();
+          int second = groupIterator.Current;
+          sharedEdges = maze.adjacentEdges(first, second);
+        }
+
+        sharedEdges.ToArray()[rand.Next(sharedEdges.Count())].IsWall = false;
+        maze.initialGroups();
+      }
+
       return maze;
     }
+
+    public HashSet<Edge> adjacentEdges(int a, int b) {
+      HashSet<Edge> aEdges = new HashSet<Edge>();
+      HashSet<Edge> bEdges = new HashSet<Edge>();
+      foreach (Tile t in mTiles) {
+        if (t.UnionGroup == a) {
+          aEdges.Add(t.Up);
+          aEdges.Add(t.Down);
+          aEdges.Add(t.Left);
+          aEdges.Add(t.Right);
+        }
+        if (t.UnionGroup == b) {
+          bEdges.Add(t.Up);
+          bEdges.Add(t.Down);
+          bEdges.Add(t.Left);
+          bEdges.Add(t.Right);
+        }
+      }
+      HashSet<Edge> sharedEdges = new HashSet<Edge>();
+      foreach (Edge e in aEdges) {
+        if (bEdges.Contains(e)) {
+          sharedEdges.Add(e);
+        }
+      }
+      return sharedEdges;
+    }
+
 
     private int mWidth;
     private int mHeight;
@@ -182,6 +248,14 @@ namespace GoldBlastGames {
           updatedTile.Right.IsWall = !updatedTile.Right.IsWall;
           break;
       }
+    }
+
+    public HashSet<int> unionGroups() {
+      HashSet<int> retVal = new HashSet<int>();
+      foreach (Tile t in mTiles) {
+        retVal.Add(t.UnionGroup);
+      }
+      return retVal;
     }
   }
 }

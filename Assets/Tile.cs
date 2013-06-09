@@ -93,5 +93,12 @@ namespace GoldBlastGames {
     /// Tile object of which to make a deep copy.
     /// </param>
     public Tile(Tile old) : this(new Edge(old.Up), new Edge(old.Down), new Edge(old.Left), new Edge(old.Right)) {}
+
+    /// <summary>
+    /// Returns a boolean representing whether or not all four of the tile's edges are closed.
+    /// </summary>
+    public bool isClosed () {
+      return mUp.IsWall && mDown.IsWall && mLeft.IsWall && mRight.IsWall;
+    }
   }
 }

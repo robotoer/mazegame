@@ -3,7 +3,7 @@ using System;
 namespace GoldBlastGames {
   public class Edge {
     public static Edge randomEdge(Random rand) {
-      return new Edge(rand.Next(100) % 2 == 0);
+      return new Edge(rand.Next(100) <= 45);
     }
 
     private bool mIsWall;
