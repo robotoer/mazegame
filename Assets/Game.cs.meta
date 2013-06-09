@@ -2,7 +2,9 @@ fileFormatVersion: 2
 guid: 19403adf5dfa7c241949124db0f3bf02
 MonoImporter:
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - Wall: {fileID: 100000, guid: d65c4d115723c484fbd66aa7a86c34b1, type: 2}
+  - MazeRunner: {fileID: 400000, guid: ad498c6185eafd940809a4194af9c1f6, type: 2}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

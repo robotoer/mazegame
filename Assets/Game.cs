@@ -9,7 +9,7 @@ namespace GoldBlastGames
   public class Game : MonoBehaviour
   {
     // Maze and Chunk sizes.
-    public static float wallWidth = 0.05f;
+    public static float wallWidth = 0.10f;
     public static float tileWidth = 1.0f;
     public static float tileHeight = 1.0f;
     public static int mazeWidth = 31;
@@ -29,6 +29,9 @@ namespace GoldBlastGames
     
     // Chunks deck for wizard.
     Maze[] chunksDeck;
+
+    // Walls object.
+    public GameObject Wall;
     
     // MazeRunners.
     public Transform MazeRunner;
@@ -107,52 +110,72 @@ namespace GoldBlastGames
       Vector3 physicalCoord = projectGameCoords(transform.position, new Vector2(x, y));
       Vector3 offset = new Vector3(0.0f, 0.5f, 0.0f);
 
-      GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
-      //cube.AddComponent<Rigidbody>();
-      cube.transform.localScale = new Vector3(tileWidth, wallWidth, 1.0f);
-      cube.transform.position = physicalCoord + mazeRenderOffset + offset;
-      cube.renderer.material.color = new Color(1.0f, 0.0f, 0.0f);
+      GameObject wall = (GameObject) Instantiate(Wall);
+      WallBehaviour wallBehaviour = (WallBehaviour) wall.GetComponent("WallBehaviour");
+      wallBehaviour.setPosition(
+          tileWidth,
+          wallWidth,
+          physicalCoord,
+          mazeRenderOffset,
+          offset);
 
-      return cube;
+      wallBehaviour.initializePosition(x, y, Maze.Direction.Up);
+
+      return wall;
     }
 
     private GameObject BottomWall(Vector3 center, int x, int y) {
       Vector3 physicalCoord = projectGameCoords(transform.position, new Vector2(x, y));
       Vector3 offset = new Vector3(0.0f, -0.5f, 0.0f);
 
-      GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
-      //cube.AddComponent<Rigidbody>();
-      cube.transform.localScale = new Vector3(tileWidth, wallWidth, 1.0f);
-      cube.transform.position = physicalCoord + mazeRenderOffset + offset;
-      cube.renderer.material.color = new Color(1.0f, 0.0f, 0.0f);
+      GameObject wall = (GameObject) Instantiate(Wall);
+      WallBehaviour wallBehaviour = (WallBehaviour) wall.GetComponent("WallBehaviour");
+      wallBehaviour.setPosition(
+          tileWidth,
+          wallWidth,
+          physicalCoord,
+          mazeRenderOffset,
+          offset);
 
-      return cube;
+      wallBehaviour.initializePosition(x, y, Maze.Direction.Down);
+
+      return wall;
     }
 
     private GameObject LeftWall(Vector3 center, int x, int y) {
       Vector3 physicalCoord = projectGameCoords(transform.position, new Vector2(x, y));
       Vector3 offset = new Vector3(-0.5f, 0.0f, 0.0f);
 
-      GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
-      //cube.AddComponent<Rigidbody>();
-      cube.transform.localScale = new Vector3(wallWidth, tileHeight, 1.0f);
-      cube.transform.position = physicalCoord + mazeRenderOffset + offset;
-      cube.renderer.material.color = new Color(1.0f, 0.0f, 0.0f);
+      GameObject wall = (GameObject) Instantiate(Wall);
+      WallBehaviour wallBehaviour = (WallBehaviour) wall.GetComponent("WallBehaviour");
+      wallBehaviour.setPosition(
+          wallWidth,
+          tileHeight,
+          physicalCoord,
+          mazeRenderOffset,
+          offset);
 
-      return cube;
+      wallBehaviour.initializePosition(x, y, Maze.Direction.Left);
+
+      return wall;
     }
 
     private GameObject RightWall(Vector3 center, int x, int y) {
       Vector3 physicalCoord = projectGameCoords(transform.position, new Vector2(x, y));
       Vector3 offset = new Vector3(0.5f, 0.0f, 0.0f);
 
-      GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
-      //cube.AddComponent<Rigidbody>();
-      cube.transform.localScale = new Vector3(wallWidth, tileHeight, 1.0f);
-      cube.transform.position = physicalCoord + mazeRenderOffset + offset;
-      cube.renderer.material.color = new Color(1.0f, 0.0f, 0.0f);
+      GameObject wall = (GameObject) Instantiate(Wall);
+      WallBehaviour wallBehaviour = (WallBehaviour) wall.GetComponent("WallBehaviour");
+      wallBehaviour.setPosition(
+          wallWidth,
+          tileHeight,
+          physicalCoord,
+          mazeRenderOffset,
+          offset);
 
-      return cube;
+      wallBehaviour.initializePosition(x, y, Maze.Direction.Right);
+
+      return wall;
     }
 
     private void updateMaze() {
@@ -295,6 +318,12 @@ namespace GoldBlastGames
       } else if (Input.GetButtonDown ("4Right")) {
         move4.moveRight ();
       }*/
+    }
+
+    // Updates a maze wall (toggles it on or off).
+    public void updateMazeWall(int tileX, int tileY, Maze.Direction direction) {
+      mMaze.updateWall(tileY, tileX, direction);
+      updateMaze();
     }
   }
 }

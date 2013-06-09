@@ -162,5 +162,26 @@ namespace GoldBlastGames {
       }
       return retVal;
     }
+
+    public enum Direction { Up, Down, Left, Right };
+
+    public void updateWall(int tileX, int tileY, Direction direction) {
+      Tile updatedTile = mTiles[tileX, tileY];
+      switch (direction)
+      {
+        case Direction.Up:
+          updatedTile.Up.IsWall = !updatedTile.Up.IsWall;
+          break;
+        case Direction.Down:
+          updatedTile.Down.IsWall = !updatedTile.Down.IsWall;
+          break;
+        case Direction.Left:
+          updatedTile.Left.IsWall = !updatedTile.Left.IsWall;
+          break;
+        case Direction.Right:
+          updatedTile.Right.IsWall = !updatedTile.Right.IsWall;
+          break;
+      }
+    }
   }
 }

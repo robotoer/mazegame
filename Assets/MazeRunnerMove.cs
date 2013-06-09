@@ -7,7 +7,6 @@ namespace GoldBlastGames {
     private int mYCoord;
     
     Game game;
-    Maze maze;
   
     public int XCoord {
       get { return mXCoord; }
@@ -28,18 +27,15 @@ namespace GoldBlastGames {
   	// Use this for initialization
   	void Start () {
       game = GameObject.Find("Game").GetComponent<Game>();
-      maze = game.maze;
-      mXCoord = maze.Width / 2;
-      mYCoord = maze.Height / 2;
+      mXCoord = game.maze.Width / 2;
+      mYCoord = game.maze.Height / 2;
       gameObject.transform.position = new Vector3(0, 0, -0.5f);
-
-      updateCamera();
   	}
 
     // Moving in the 4 cardinal directions.
     public void moveUp () {
       if (inBounds (mXCoord, mYCoord - 1)
-          && !(maze.Tiles[mYCoord,mXCoord].Up.IsWall)) {
+          && !(game.maze.Tiles[mYCoord,mXCoord].Up.IsWall)) {
         mYCoord -= 1;
         gameObject.transform.Translate(Vector3.up * Game.tileHeight);
       }
@@ -47,7 +43,7 @@ namespace GoldBlastGames {
     
     public void moveDown () {
       if (inBounds (mXCoord, mYCoord + 1)
-          && !(maze.Tiles[mYCoord,mXCoord].Down.IsWall)) {
+          && !(game.maze.Tiles[mYCoord,mXCoord].Down.IsWall)) {
         mYCoord += 1;
         gameObject.transform.Translate (-Vector3.up * Game.tileHeight);
       }
@@ -55,7 +51,7 @@ namespace GoldBlastGames {
     
     public void moveLeft() {
       if (inBounds (mXCoord - 1, mYCoord)
-          && !(maze.Tiles[mYCoord,mXCoord].Left.IsWall)) {
+          && !(game.maze.Tiles[mYCoord,mXCoord].Left.IsWall)) {
         mXCoord -= 1;
         gameObject.transform.Translate (-Vector3.right * Game.tileWidth);
       }
@@ -63,7 +59,7 @@ namespace GoldBlastGames {
     
     public void moveRight() {
       if (inBounds (mXCoord + 1, mYCoord)
-          && !(maze.Tiles[mYCoord,mXCoord].Right.IsWall)) {
+          && !(game.maze.Tiles[mYCoord,mXCoord].Right.IsWall)) {
         mXCoord += 1;
         gameObject.transform.Translate (Vector3.right * Game.tileWidth);
       }
